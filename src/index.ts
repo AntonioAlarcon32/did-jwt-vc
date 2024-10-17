@@ -1,4 +1,4 @@
-import { createJWT, createMultisignatureJWT, verifyJWT } from 'did-jwt'
+import { createJWT, createMultisignatureJWT, verifyJWT, AddSigningAlgorithm, AddVerifierAlgorithm } from 'did-jwt'
 import type { Resolvable } from 'did-resolver'
 import * as validators from './validators.js'
 import { VC_ERROR } from './validators.js'
@@ -54,6 +54,7 @@ export type {
   VerifyPresentationOptions,
 }
 
+export { AddSigningAlgorithm, AddVerifierAlgorithm }
 export { transformCredentialInput, transformPresentationInput, normalizeCredential, normalizePresentation }
 
 /**
