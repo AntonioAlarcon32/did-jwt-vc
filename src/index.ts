@@ -109,7 +109,6 @@ export async function createVerifiableCredentialJwt(
         alg: iss.alg || options.header?.alg || JWT_ALG,
       })
     }
-    //@ts-expect-error TOBEFIXED
     return createMultisignatureJWT(parsedPayload, { ...options }, issuers)
   }
 }
