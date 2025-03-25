@@ -1,4 +1,4 @@
-import type { Signer, JWTVerified, JWTHeader, JWTOptions, JWTVerifyOptions } from 'did-jwt'
+import type { Signer, JWTVerified, JWTHeader, JWTOptions, JWTVerifyOptions, AbstractSigner } from 'did-jwt'
 
 export const JWT_ALG = 'ES256K'
 export const JWT_FORMAT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
@@ -226,7 +226,7 @@ export type VerifiedCredential = VerifiedJWT & {
  */
 export interface Issuer {
   did: string
-  signer: Signer
+  signer: Signer | AbstractSigner
   alg?: string
 }
 

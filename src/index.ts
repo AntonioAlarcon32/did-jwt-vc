@@ -1,4 +1,4 @@
-import { createJWT, createMultisignatureJWT, verifyJWT } from 'did-jwt'
+import { AbstractVerifier, createJWT, createMultisignatureJWT, verifyJWT } from 'did-jwt'
 import type { Resolvable } from 'did-resolver'
 import * as validators from './validators.js'
 import { VC_ERROR } from './validators.js'
@@ -109,7 +109,7 @@ export async function createVerifiableCredentialJwt(
         alg: iss.alg || options.header?.alg || JWT_ALG,
       })
     }
-
+    //@ts-expect-error TOBEFIXED
     return createMultisignatureJWT(parsedPayload, { ...options }, issuers)
   }
 }
@@ -228,12 +228,13 @@ export function validatePresentationPayload(payload: PresentationPayload): void 
 export async function verifyCredential(
   vc: JWT,
   resolver: Resolvable,
-  options: VerifyCredentialOptions = {}
+  options: VerifyCredentialOptions = {},
+  verifier?: AbstractVerifier
 ): Promise<VerifiedCredential> {
   const nbf = options?.policies?.issuanceDate === false ? false : undefined
   const exp = options?.policies?.expirationDate === false ? false : undefined
   options = { ...options, policies: { ...options?.policies, nbf, exp, iat: nbf } }
-  const verified: Partial<VerifiedCredential> = await verifyJWT(vc, { resolver, ...options })
+  const verified: Partial<VerifiedCredential> = await verifyJWT(vc, { resolver, ...options }, verifier)
   verified.verifiableCredential = normalizeCredential(verified.jwt as string, options?.removeOriginalFields)
   if (options?.policies?.format !== false) {
     validateCredentialPayload(verified.verifiableCredential)
@@ -287,15 +288,20 @@ export function verifyPresentationPayloadOptions(
 export async function verifyPresentation(
   presentation: JWT,
   resolver: Resolvable,
-  options: VerifyPresentationOptions = {}
+  options: VerifyPresentationOptions = {},
+  verifier?: AbstractVerifier
 ): Promise<VerifiedPresentation> {
   const nbf = options?.policies?.issuanceDate === false ? false : undefined
   const exp = options?.policies?.expirationDate === false ? false : undefined
   options = { audience: options.domain, ...options, policies: { ...options?.policies, nbf, exp, iat: nbf } }
-  const verified: Partial<VerifiedPresentation> = await verifyJWT(presentation, {
-    resolver,
-    ...options,
-  })
+  const verified: Partial<VerifiedPresentation> = await verifyJWT(
+    presentation,
+    {
+      resolver,
+      ...options,
+    },
+    verifier
+  )
   verifyPresentationPayloadOptions(verified.payload as JwtPresentationPayload, options)
   verified.verifiablePresentation = normalizePresentation(verified.jwt as string, options?.removeOriginalFields)
   if (options?.policies?.format !== false) {

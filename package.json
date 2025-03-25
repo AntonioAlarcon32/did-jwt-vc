@@ -27,7 +27,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
     "prepublishOnly": "yarn test:ci && yarn format && yarn lint",
-    "release": "semantic-release --debug"
+    "release": "semantic-release --debug",
+    "prepare": "npm run build"
   },
   "author": "mi-xu",
   "contributors": [
@@ -35,7 +36,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "did-jwt": "^8.0.0",
+    "did-jwt": "github:AntonioAlarcon32/improved-did-jwt",
     "did-resolver": "^4.1.0"
   },
   "repository": {
@@ -46,6 +47,7 @@
     "@babel/core": "7.26.9",
     "@babel/preset-env": "7.26.9",
     "@babel/preset-typescript": "7.26.0",
+    "@faker-js/faker": "9.5.0",
     "@noble/curves": "1.8.1",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
@@ -61,7 +63,6 @@
     "eslint-plugin-jest": "28.11.0",
     "eslint-plugin-prettier": "5.2.3",
     "ethr-did": "3.0.25",
-    "@faker-js/faker": "9.5.0",
     "jest": "29.7.0",
     "microbundle": "0.15.1",
     "prettier": "3.5.2",
