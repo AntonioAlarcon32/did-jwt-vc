@@ -56,6 +56,23 @@ export type {
 
 export { transformCredentialInput, transformPresentationInput, normalizeCredential, normalizePresentation }
 
+export {
+  type Disclosure,
+  type DisclosureTuple,
+  digestDisclosure,
+  makeDisclosure,
+  parseDisclosure,
+  type IssueSdCredentialOptions,
+  type IssueSdCredentialResult,
+  issueSdCredential,
+  type CreateSdPresentationOptions,
+  type CreateSdPresentationResult,
+  createSdPresentation,
+  type VerifiedSdPresentation,
+  type VerifySdPresentationOptions,
+  verifySdPresentation,
+} from './sd/index.js'
+
 /**
  * Creates a VerifiableCredential given a `CredentialPayload` or `JwtCredentialPayload` and an `Issuer`.
  *
