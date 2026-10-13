@@ -8,12 +8,13 @@ export interface IssueSdCredentialOptions {
   issuer: Issuer
   /**
    * Header fields merged into the VC JWT header alongside `typ: 'vc+sd-jwt'`.
-   * For EIP-712 callers this is `{ eip712Domain: domain }`. Anything JSON-serialisable works.
+   * Anything JSON-serialisable works.
    */
   headerExtensions?: Record<string, unknown>
   /**
    * VC payload fields apart from `vc` itself — typically `sub`, `nbf`, `exp`,
-   * `jti`. The `iss` is set automatically from `issuer.did`.
+   * `jti`. The `iss` is set automatically from `issuer.did`. EIP-712 callers
+   * add their `domain` here, since the EIP-712 signer reads it from the payload.
    */
   base?: { sub?: string; nbf?: number; exp?: number; jti?: string; [k: string]: unknown }
   /** Extra entries appended after `"VerifiableCredential"` in `vc.type`. */

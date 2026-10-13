@@ -36,7 +36,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "did-jwt": "github:AntonioAlarcon32/did-jwt#dist",
+    "did-jwt": "github:AntonioAlarcon32/did-jwt#480b591ae3bd75d906c9c375cb5e0a338c9efc1c",
     "did-resolver": "^4.1.0"
   },
   "repository": {

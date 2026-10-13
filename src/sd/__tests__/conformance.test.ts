@@ -121,6 +121,29 @@ describe('SD-JWT conformance against @sd-jwt/decode', () => {
     expect(subject.nationality).toBeUndefined()
   })
 
+  it('payloadExtensions reach the KB-JWT but cannot override the required claims', async () => {
+    const { jwt, disclosures } = await issueFixture()
+    const domain = { name: 'EIP712Signature', version: '1', chainId: 1 }
+
+    const presentation = await createSdPresentation({
+      vcJwt: jwt,
+      disclosures,
+      reveal: ['degree'],
+      holderDid: holder.did,
+      signer: holder.signer!,
+      alg: holder.alg ?? 'ES256K-R',
+      payloadExtensions: { domain, nonce: 'attacker-nonce', aud: 'did:web:attacker.example' },
+      audience: 'did:web:verifier.example',
+      nonce: 'nonce-123',
+    })
+
+    const decoded = await decodeSdJwt(presentation.combined, hasher)
+    const kbPayload = decoded.kbJwt!.payload as any
+    expect(kbPayload.domain).toEqual(domain)
+    expect(kbPayload.nonce).toEqual('nonce-123')
+    expect(kbPayload.aud).toEqual('did:web:verifier.example')
+  })
+
   it('our sd_hash commits to the same bytes their splitter sees as the presentation body', async () => {
     const { jwt, disclosures } = await issueFixture()
 

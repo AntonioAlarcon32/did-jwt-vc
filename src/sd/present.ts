@@ -18,11 +18,14 @@ export interface CreateSdPresentationOptions {
   signer: Signer | AbstractSigner
   /** JWS algorithm used for the KB-JWT (e.g. `'EIP712'`, `'ES256K'`, `'EdDSA'`). */
   alg: string
-  /**
-   * Header fields merged into the KB-JWT header alongside `typ: 'kb+jwt'`.
-   * For EIP-712 callers this is `{ eip712Domain: domain }`.
-   */
+  /** Header fields merged into the KB-JWT header alongside `typ: 'kb+jwt'`. */
   headerExtensions?: Record<string, unknown>
+  /**
+   * Extra claims merged into the KB-JWT payload. The required claims (`aud`,
+   * `nonce`, `iat`, `exp`, `sd_hash`) always take precedence. For EIP-712 callers
+   * this is `{ domain }`, since the EIP-712 signer reads its domain from the payload.
+   */
+  payloadExtensions?: Record<string, unknown>
   /** Verifier's identifier — becomes the KB-JWT's `aud` claim. */
   audience: string
   /** Fresh challenge supplied by the verifier — becomes the KB-JWT's `nonce`. */
@@ -75,6 +78,7 @@ export async function createSdPresentation(
   const now = Math.floor(Date.now() / 1000)
   const kbJwt: string = await createJWT(
     {
+      ...(opts.payloadExtensions ?? {}),
       aud: opts.audience,
       nonce: opts.nonce,
       iat: now,
